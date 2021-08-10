@@ -1,0 +1,83 @@
+
+	<div id="chat-app">
+		<div id="chat" clas="has-text-centered">
+			<section class="hero is-dark">
+				<div class="hero-body">
+					<div class="container">
+						<h2 class="title"> Socket.io Chat</h2>
+						<h4> Coder House - Backend Project</h4>
+					</div>
+				</div>
+			</section>
+			<section class="section chat-container">
+				<div class="container">
+					<div class="columns">
+						<div class="box column" >
+							<h2 class="title"> Chatbox</h2>
+							<div class="chat-messages has-text-left">
+								<ul id="chat-messages">
+							</div>
+							<form> 
+								<div class="field has-addons"> 
+								<p class="control">
+									<input type='text' class='input' value='Su nombre' id='name'>
+								</p>
+								<p class="control is-expanded">
+									<input type='text' class='input' placeholder='Mensaje' id='message'>
+								</p>
+								{{!-- <p class="control"> 
+									<input type='submit' class='button is-success' value='Post'>
+								</p> --}}
+								</div>
+								<div>
+								<p class="control">
+									<input type='text' class='input' value='UserId' id='UserId'>
+								</p>
+								{{!-- <p class="control">
+									<input type='text' class='input' value='123' id='token'>
+								</p> --}}
+								<p> 
+									<input type='submit' class='button is-danger' value='Enviar'>
+								</p>
+								</div>
+							</form> 
+						</div>
+					</div>
+				</div>
+			</section>
+			<footer>
+          		<div class= "container">
+           			<div class= "content">
+					</div>
+				</div>
+			</footer>
+		   <script>
+        const socket = io();
+        $('form').submit(function() {
+          const name = $('#name').val();
+          const message = $('#message').val();
+		  {{!-- const token = $('#token').val(); --}}
+		  const UserId = $('#UserId').val();
+          socket.emit('new-message', `${name} : ${message} `);
+		  $('#chat-messages').append($('<li style="color:teal">').text(`${name} : ${message} `))
+		  
+		  socket.emit('userid',`${UserId}`);
+		  {{!-- socket.emit('token',`${token}`); --}}
+          $('#message').val('');
+          return false; 
+        });
+        socket.on('new-message', function(message) {
+          $('#chat-messages').append($('<li>').text(message));
+        });
+		socket.on('resp-message', function(message) {
+          $('#chat-messages').append($('<li>').text(message)).append($('<br>'));
+
+        });
+		
+
+		</script>
+     
+		</div>
+	</div>
+	
+
