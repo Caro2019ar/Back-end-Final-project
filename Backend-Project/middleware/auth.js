@@ -3,6 +3,7 @@ import UserModel from "../models/user.js";
 import localStrategy from "passport-local";
 import JWTstrategy from "passport-jwt";
 import ExtractJWT from "passport-jwt";
+import { validationSignup } from "../controllers/validacion.js";
 
 const localStrategyPL = localStrategy.Strategy;
 const JWTstrategyPJ = JWTstrategy.Strategy;
@@ -25,17 +26,12 @@ const strategyJWT = {
 
 const signup = async (req, email, password, done) => {
 	try {
-		const nombre = req.body.nombre;
-		const telefono = req.body.telefono;
-		const isAdmin = req.body.isAdmin;
-		const direccion = req.body.direccion;
-		const calle = direccion.calle;
-		const altura = direccion.altura;
-		const codigoPostal = direccion.codigoPostal;
-
+		const { nombre, telefono, isAdmin, direccion, passwordRepeat } = req.body;
+		const { calle, altura, codigoPostal } = direccion;
 		const user = await new UserModel({
 			email,
 			password,
+			passwordRepeat,
 			nombre,
 			telefono,
 			isAdmin,
@@ -44,7 +40,7 @@ const signup = async (req, email, password, done) => {
 		const creado = await user.save();
 
 		const userOK = await UserModel.findOne({ email: email });
-		console.log("user", userOK);
+		//console.log("user", userOK);
 		return done(null, userOK);
 	} catch (error) {
 		console.log("Error:", error);

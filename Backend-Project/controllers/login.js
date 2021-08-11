@@ -2,19 +2,24 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
 import { CarritoModel } from "../models/model.js";
-
+import { validationSignup } from "../controllers/validacion.js";
 
 export const signup = async (req, res, next) => {
-	
 	const userId = req.user._id;
-	const carritoNuevo = new CarritoModel({
-		userId: userId,
-	});
-	const creado = await carritoNuevo.save();
-	res.json({
-		message: "Signup successful",
-		creadoCarrito: creado,
-	});
+
+	try {
+		const carritoNuevo = new CarritoModel({
+			userId: userId,
+		});
+		const creado = await carritoNuevo.save();
+		res.json({
+			message: "Signup successful",
+			creadoCarrito: creado,
+		});
+		// }
+	} catch (error) {
+		return next(error);
+	}
 };
 
 export const login = async (req, res, next) => {

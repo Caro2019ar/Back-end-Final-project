@@ -17,6 +17,10 @@ const UserSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	passwordRepeat: {
+		type: String,
+		required: true,
+	},
 	isAdmin: { type: Boolean, default: false },
 	direccion: {
 		calle: { type: String, required: true },
@@ -31,6 +35,9 @@ UserSchema.pre("save", async function (next) {
 	const user = this;
 	const hash = await bcrypt.hash(user.password, 10);
 	this.password = hash;
+	const hash2 = await bcrypt.hash(user.passwordRepeat, 10);
+	this.passwordRepeat = hash2;
+
 	next();
 });
 
