@@ -38,7 +38,6 @@ const validationSignup = (req, res, next) => {
 };
 
 const validatePhone = (phoneNumber) => {
-	// let phoneNumber = "(11) 9992 0999";
 	const phoneRGEX =
 		/^[(]{0,1}[0-9]{2}[)]{0,1}[-\s\.]{0,1}[0-9]{4}[-\s\.]{0,1}[0-9]{4}$/;
 	const phoneResult = phoneRGEX.test(phoneNumber);
@@ -46,20 +45,16 @@ const validatePhone = (phoneNumber) => {
 };
 
 const validateEmail = (email) => {
-	// let email = "dada*kk!'+-#$%so.dad@adasda.casda.dsasd";
 	const emailRGEX =
 		/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	const emailResult = emailRGEX.test(email);
 	return emailResult;
 };
 
-// Aceita acentos, ç, ñ, apóstrofe, mas não números e caracteres especiais
 const validateName = (name) => {
-	// let name = "Robert's Dajoú's Yaça ñata Shön";
 	const nameRGX = /^[a-záàâãéèêíïóôõöúçñ' ]+$/i;
 	const nameResult = nameRGX.test(name);
 	return nameResult;
 };
-// console.log(validateName());
 
 export { validateEmail, validateName, validatePhone, validationSignup };
