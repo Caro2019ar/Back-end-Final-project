@@ -6,15 +6,19 @@ import { validationSignup } from "../controllers/validacion.js";
 
 export const signup = async (req, res, next) => {
 	const userId = req.user._id;
+	const email = req.user.email;
 
 	try {
 		const carritoNuevo = new CarritoModel({
 			userId: userId,
 		});
 		const creado = await carritoNuevo.save();
-		res.json({
+		const userOK = await User.findOne({ email: email });
+
+		res.status(201).json({
 			message: "Signup successful",
 			creadoCarrito: creado,
+			usuarioCadastrado: userOK,
 		});
 		// }
 	} catch (error) {
@@ -29,7 +33,7 @@ export const login = async (req, res, next) => {
 				const error = new Error("An error occurred.");
 				return next(error);
 			}
-
+			//Problema aqui para Swagger identificar user
 			if (!user && info) {
 				return res.status(401).json({ message: info.message });
 			}
@@ -40,7 +44,7 @@ export const login = async (req, res, next) => {
 				const body = { _id: user._id, email: user.email };
 				const token = jwt.sign({ user: body }, "TOP_SECRET");
 
-				return res.json({ token });
+				return res.status(200).json({ message: token });
 			});
 		} catch (error) {
 			return next(error);

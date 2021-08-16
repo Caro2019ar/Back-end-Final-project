@@ -38,12 +38,9 @@ const signup = async (req, email, password, done) => {
 			direccion: { calle, altura, codigoPostal },
 		});
 		const creado = await user.save();
-
 		const userOK = await UserModel.findOne({ email: email });
-		//console.log("user", userOK);
 		return done(null, userOK);
 	} catch (error) {
-		console.log("Error:", error);
 		done(error);
 	}
 };
@@ -101,7 +98,9 @@ export const isAdminFunc = async (req, res, next) => {
 				.send({ message: "Solo permitido a administradores" });
 		}
 	} catch (error) {
-		res.send({ message: "Error en isAdminFunc" });
+		return res
+			.status(401)
+			.send({ message: "Solo permitido a administradores" });
 	}
 };
 

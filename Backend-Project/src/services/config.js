@@ -9,7 +9,7 @@ dotenv.config({
 const entorno = {
 	NODE_ENV: process.env.NODE_ENV || "development",
 	MONGO_DB_URI: process.env.MONGO_DB_URI || "URI",
-	TOKEN_KEEP_ALIVE: process.env.TOKEN_KEEP_ALIVE,
-	JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
+	TOKEN_KEEP_ALIVE: process.env.TOKEN_KEEP_ALIVE || "TOKEN_KEEP_ALIVE",
+	JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || "JWT_SECRET_KEY",
 };
 export default entorno;

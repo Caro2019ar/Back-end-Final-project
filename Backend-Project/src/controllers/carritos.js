@@ -11,10 +11,10 @@ export const getCart = async (req, res) => {
 		if (carrito) {
 			res.status(200).json({ Carrito: carrito });
 		} else {
-			res.json({ Carrito: "vacio" });
+			res.status(200).json({ Carrito: "vacio" });
 		}
 	} catch (err) {
-		res.json({ Mensaje: "No se pudo buscar carrito" });
+		res.status(404).json({ Mensaje: "No se pudo buscar carrito" });
 	}
 };
 
@@ -108,6 +108,7 @@ export const deleteItem = async (req, res) => {
 	}
 };
 
+// problema pra mandar     "mensaje": "No se pudo crear la orden"
 export const submitOrder = async (req, res) => {
 	const userEMail = req.user.email;
 	const userId = req.user._id;
@@ -169,27 +170,3 @@ export const submitOrder = async (req, res) => {
 	} catch (error) {}
 	return res.status(400).json({ mensaje: "No se pudo crear la orden" });
 };
-
-
-function searchPriceBD(productosBD, IdItemCarrito) {
-	let indexProdBD = 0;
-	indexProdBD = productosBD.findIndex((prod) => {
-		return prod._id == IdItemCarrito;
-	});
-
-	if (indexProdBD != -1) {
-		let precioBD = productosBD[indexProdBD].precio;
-		return precioBD;
-	}
-	return;
-}
-function newArrayItensCart(itensDelCarritoCopy, newArrayDeIds) {
-	//Voy a recorrer todo el array de itens del carrito que están en el NewArrayDeIds
-	for (let index = 0; index < newArrayDeIds.length; index++) {
-		let IdItemCarrito = newArrayDeIds[index].toString();
-		//Mismo indice del array de itens del carrito:
-		let price = searchPriceBD(productosBD, IdItemCarrito);
-		itensDelCarritoCopy[index].productPrice = price;
-	}
-	return itensDelCarritoCopy;
-}

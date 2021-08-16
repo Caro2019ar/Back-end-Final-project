@@ -1,0 +1,479 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"version": "1.0.0",
+		"title": "Backend Project",
+		"description": "<b>CoderHouse Backend Project</b>.",
+		"contact": { "name": "Carolina T. M.", "email": "argente2019@gmail.com" }
+	},
+	"servers": [
+		{ "url": "http://localhost:8080", "description": "Development server" }
+	],
+	"basePath": "/",
+	"schemes": ["http", "https"],
+	"paths": {
+		"/": {
+			"post": {
+				"tags": ["Chat"],
+				"description": "Chat en Socket.io"
+			}
+		},
+		"/api/user/signup": {
+			"post": {
+				"tags": ["User"],
+				"description": "Permite crear un nuevo usuario",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/User"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": { "description": "Signup successful" },
+					"400": { "description": "Bad Request" }
+				}
+			}
+		},
+		"/api/user/login": {
+			"post": {
+				"tags": ["User"],
+				"description": "Permite obtener un token para acceder a las rutas segurizadas",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginSchema"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Token",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxMTVlYzMzNWUxMjk3MjZiZDllMDU4YiIsImVtYWlsIjoianVuMkBnbWFpbC5jb20ifSwiaWF0IjoxNjI4OTA2MDk4fQ.UJxcAk4K3eiOs1xQrx76R6kpjOg3oNDpX37uMhMpYKc"
+								}
+							}
+						}
+					},
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/image/upload": {
+			"post": {
+				"tags": ["Image"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Subir imagen de producto. Utilizar Postman, selecionando el archivo JPG/PNG.",
+				"requestBody": {
+					"content": {
+						"image/png:": {
+							"schema": {
+								"type": "string",
+								"format": "binary"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Success",
+						"example": "http://localhost:8080/api/image/61172bf8387c613019fe6b85"
+					},
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/image/{id}": {
+			"get": {
+				"tags": ["Image"],
+				"description": "Buscar imagen por su id",
+				"parameters": [
+					{ "name": "id", "in": "path", "required": true, "type": "string" }
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"image/png": {
+								"schema": {
+									"type": "string",
+									"format": "binary"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found"
+					}
+				}
+			}
+		},
+		"/api/image/{filename}": {
+			"delete": {
+				"tags": ["Image"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Borrar imagen, informar nombre completo",
+				"parameters": [
+					{
+						"name": "filename",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"example": "http://localhost:8080/api/image/poroto.jpeg"
+					}
+				],
+				"responses": {
+					"200": { "description": "Se elimino la imagen" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/products/": {
+			"get": {
+				"tags": ["Product"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Lista todos los productos",
+				"parameters": [],
+				"responses": {
+					"201": { "description": "Lista de productos" },
+					"401": { "description": "Unauthorized" },
+					"500": { "description": "Error al obtener todos los productos" }
+				}
+			},
+			"post": {
+				"tags": ["Product"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Ruta para cadastrar producto",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Product"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": { "description": "Producto guardado" },
+					"401": { "description": "Unauthorized" },
+					"500": { "description": "No se pudo guardar" }
+				}
+			}
+		},
+		"/api/products/porid/{id}": {
+			"get": {
+				"tags": ["Product"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Buscar producto por ID informado",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"example": "610e82353ffa2504dedd2d3b"
+					}
+				],
+				"responses": {
+					"200": { "description": "Success" },
+					"400": { "description": "Bad request" }
+				}
+			}
+		},
+		"/api/products/{category}": {
+			"get": {
+				"tags": ["Product"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Busca productos por categoria",
+				"parameters": [
+					{
+						"name": "category",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"example": "fideos"
+					}
+				],
+				"responses": {
+					"200": { "description": "Success" },
+					"401": { "description": "Unauthorized" },
+					"500": { "description": "No se pudo buscar" }
+				}
+			}
+		},
+		"/api/products/{id}": {
+			"patch": {
+				"tags": ["Product"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Atualiza producto identificado por ID",
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"type": "string",
+						"example": "61173c8b5b77083855d7cee0"
+					},
+					{
+						"name": "obj",
+						"in": "body",
+						"type": "object",
+						"schema": { "$ref": "#/components/schemas/Product" }
+					}
+				],
+				"responses": {
+					"400": { "description": "Bad Request" },
+					"401": { "description": "Unauthorized" }
+				}
+			},
+			"delete": {
+				"tags": ["Product"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Elimina el producto informado por su ID",
+				"parameters": [
+					{ "name": "id", "in": "path", "required": true, "type": "string" }
+				],
+				"responses": {
+					"200": { "description": "OK" },
+					"401": { "description": "Unauthorized" },
+					"404": { "description": "Not Found" }
+				}
+			}
+		},
+		"/api/cart/": {
+			"get": {
+				"tags": ["Cart"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Retorna todos carritos del usuario",
+				"parameters": [],
+				"responses": {
+					"200": { "description": "OK" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/cart/add/": {
+			"post": {
+				"tags": ["Cart"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Agrega item al carrito usando el ID y cantidad del producto",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IDyCantidad"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": { "description": "OK" },
+					"400": { "description": "Bad Request" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/cart/delete": {
+			"post": {
+				"tags": ["Cart"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Elimina el producto por la cantidad informada",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IDyCantidad"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": { "description": "OK" },
+					"400": { "description": "Bad Request" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/cart/submit": {
+			"post": {
+				"tags": ["Cart"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Genera una orden con productos del carrito y envia email al usuario",
+				"parameters": [],
+				"responses": {
+					"200": { "description": "OK" },
+					"400": { "description": "Bad Request" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/orders/": {
+			"get": {
+				"tags": ["Order"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Lista todas ordenes del usuario considerando el token",
+				"parameters": [],
+				"responses": {
+					"200": { "description": "OK" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/orders/{orderId}": {
+			"get": {
+				"tags": ["Order"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Listara la orden con el ID informado",
+				"parameters": [
+					{
+						"name": "orderId",
+						"in": "path",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": { "description": "OK" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		},
+		"/api/orders/complete": {
+			"post": {
+				"tags": ["Order"],
+				"security": [{ "bearerAuth": [] }],
+				"description": "Pasa estado de la orden de Generada a Completada. Utilizar el ID de la orden",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"_id": {
+										"type": "string",
+										"example": "61199591aff0a477b2825ea9"
+									}
+								}
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": { "description": "OK" },
+					"400": { "description": "Bad Request" },
+					"401": { "description": "Unauthorized" }
+				}
+			}
+		}
+	},
+	"components": {
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		},
+		"schemas": {
+			"User": {
+				"type": "object",
+				"properties": {
+					"nombre": { "type": "string" },
+					"email": { "type": "string", "unique": "true" },
+					"telefono": { "type": "string" },
+					"isAdmin": { "type": "boolean", "default": "false" },
+					"direccion": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"calle": { "type": "string" },
+								"altura": { "type": "string" },
+								"codigoPostal": { "type": "string" },
+								"piso": { "type": "string", "required": false },
+								"departamento": { "type": "string", "required": false }
+							}
+						}
+					},
+					"password": { "type": "string" },
+					"passwordRepeat": { "type": "string" }
+				},
+				"example": {
+					"nombre": "Juan Pablo Escobar",
+					"email": "jun2@gmail.com",
+					"telefono": "11 9999-9999",
+					"isAdmin": "true",
+					"direccion": {
+						"calle": "av. de las flores",
+						"altura": "calle ariste",
+						"codigoPostal": "B2030",
+						"piso": "9",
+						"departamento": "a10"
+					},
+					"password": "123456",
+					"passwordRepeat": "123456"
+				}
+			},
+			"Product": {
+				"type": "object",
+				"properties": {
+					"nombre": { "type": "string" },
+					"descripcion": { "type": "string" },
+					"categoria": { "type": "string" },
+					"precio": { "type": "integer", "format": "int32" },
+					"stockDisponible": { "type": "integer", "format": "int32" },
+					"fotos": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"_id": { "type": "string" }
+							}
+						}
+					}
+				},
+				"example": {
+					"nombre": "leche entera",
+					"descripcion": "leche larga vida",
+					"categoria": "lacteos",
+					"precio": 110,
+					"stockDisponible": 2600
+				}
+			},
+			"LoginSchema": {
+				"type": "object",
+				"properties": {
+					"email": { "type": "string" },
+					"password": { "type": "string" }
+				},
+				"example": {
+					"email": "jun2@gmail.com",
+					"password": "123456"
+				}
+			},
+			"IDyCantidad": {
+				"type": "object",
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"cantidad": {
+						"type": "integer",
+						"format": "int32"
+					}
+				},
+				"example": {
+					"_id": "6111d2ba72205b48f25024a9",
+					"cantidad": 5
+				}
+			}
+		}
+	}
+}

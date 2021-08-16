@@ -34,6 +34,7 @@ router.use(
 	})
 );
 
+
 router.use("/", routesAuth);
 router.use("/api/image", imageRoute);
 

@@ -7,6 +7,8 @@ import handlebars from "express-handlebars";
 import indexRouter from "../routes/index.js";
 import path from "path";
 import socketFunction from "../public/js/main.js";
+import swaggerUi from "swagger-ui-express";
+import doc from "./swagger.json";
 const __dirname = path.resolve();
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -33,5 +35,6 @@ app.engine(
 );
 app.set("view engine", "hbs");
 app.set("views", "./views");
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(doc));
 
 export default app;

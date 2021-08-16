@@ -11,8 +11,12 @@ export const getProducts = async (req, res) => {
 };
 export const getProductPorId = async (req, res) => {
 	const { id } = req.params;
-	const productoPorId = await productos.buscarDTO(id);
-	res.json(productoPorId);
+	try {
+		const productoPorId = await productos.buscarDTO(id);
+		res.status(200).json(productoPorId);
+	} catch (error) {
+		res.status(400).send({ message: "No se pudo encontrar el producto" });
+	}
 };
 
 export const getProductsCategory = async (req, res) => {
@@ -21,19 +25,19 @@ export const getProductsCategory = async (req, res) => {
 	const resultadoCategory = await productos.encontrarCategoria(category);
 	res.json(resultadoCategory);
 };
+// Aqui podia usar interface de Typescript para definir formato do produto
 
 export const postProducts = async (req, res) => {
 	const producto = req.body;
 	try {
 		const retorno = await productos.guardar(producto);
-		if (retorno) {
-			res.status(201).send({ message: "Producto guardado" });
-		}
+		res.status(201).json(retorno);
 	} catch (err) {
-		res.status(400).send({ message: "No se pudo guardar" });
+		res.status(500).send({ message: "No se pudo guardar" });
 	}
 };
 
+// não atualiza só 1 campo?
 export const patchProductId = async (req, res) => {
 	const { id } = req.params;
 
@@ -61,7 +65,7 @@ export const deleteProductId = async (req, res) => {
 		const product = await productos.listar(id);
 		if (product) {
 			const deletedProduct = await productos.borrar(id);
-			res.status(200).send("Producto borrado");
+			res.status(200).json({ message: "Producto borrado" });
 		}
 	} catch (err) {
 		res.status(404).send("Producto no encontrado");

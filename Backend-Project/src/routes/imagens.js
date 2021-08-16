@@ -22,6 +22,7 @@ router.post(
 		try {
 			const user = await UserModel.findOne({ email: req.user.email });
 			if (user.isAdmin) {
+				console.log("req", req);
 				if (req.file === undefined) return res.send("you must select a file.");
 				const imgUrl = `http://localhost:8080/api/image/${req.file.id}`;
 				return res.send(imgUrl);
@@ -39,10 +40,14 @@ router.get("/:id", async (req, res) => {
 	const { id } = req.params;
 	try {
 		const file = await gfs.files.find({ _id: id });
-		const readStream = gfs.createReadStream({ _id: id });
-		readStream.pipe(res);
+		if (!file) {
+			res.status(404).send("not found");
+		} else {
+			const readStream = await gfs.createReadStream({ _id: id });
+			readStream.pipe(res);
+		}
 	} catch (error) {
-		res.send("not found");
+		res.send("An error occured.");
 	}
 });
 
@@ -55,7 +60,7 @@ router.delete(
 			const user = await UserModel.findOne({ email: req.user.email });
 			if (user.isAdmin) {
 				await gfs.files.deleteOne({ filename: req.params.filename });
-				res.send("success");
+				res.status(200).send("Se elimino la imagen");
 			} else {
 				res.status(401).send({ message: "Token is not valid for admin user" });
 			}
