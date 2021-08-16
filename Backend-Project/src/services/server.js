@@ -18,9 +18,6 @@ const io = new Socket(http, {
 });
 socketFunction(io);
 
-app.get("/", (req, res) => {
-	res.render("chat");
-});
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -37,4 +34,7 @@ app.set("view engine", "hbs");
 app.set("views", "./views");
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(doc));
 
+app.get("/", (req, res) => {
+	res.render("chat");
+});
 export default app;

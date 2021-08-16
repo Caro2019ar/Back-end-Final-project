@@ -7,15 +7,12 @@ import {
 import UserModel from "../../models/user.js";
 
 
-// userId para teste = 610c98c6d9eeeda698177de7
-
 let orden;
 let carrito;
 let productos;
 let userId;
 let userIdOK;
-// let tokenInformado;
-// let tokenFromJWT = "123";
+
 
 const checkUserId = async (idInformado) => {
 	try {
@@ -29,10 +26,8 @@ const checkUserId = async (idInformado) => {
 };
 
 const getOrder = async () => {
-	// console.log("userId", userId);
 	try {
 		orden = await OrdenModel.findOne().sort({ createdAt: -1 }).lean();
-		//console.log("ordenes", ordenes);
 		return orden;
 	} catch (error) {
 		return "Error";
@@ -40,10 +35,10 @@ const getOrder = async () => {
 };
 
 const getCart = async (userId) => {
-	// console.log("userId", userId);
+
 	try {
 		carrito = await CarritoModel.find({ userId: userId }).lean();
-		//console.log("ordenes", ordenes);
+	
 		return carrito;
 	} catch (error) {
 		console.log("Error en GetCart");
@@ -52,10 +47,10 @@ const getCart = async (userId) => {
 };
 
 const getStock = async () => {
-	// console.log("userId", userId);
+
 	try {
 		productos = await ProductoModel.find({}).lean();
-		//console.log("ordenes", ordenes);
+	
 		return productos;
 	} catch (error) {
 		console.log("Error en GetCart");
@@ -101,17 +96,10 @@ function socketFunction(io) {
 				);
 				return;
 			}
-			// if (tokenInformado !== tokenFromJWT) {
-			// 	console.log("Token incorrecto: ", tokenInformado);
-			// 	socket.emit(
-			// 		"resp-message",
-			// 		`Token incorrecto, favor informarlo correctamente para continuar.`
-			// 	);
-			// 	return;
-			// }
+		
 			if (message.includes("carrito")) {
 				await getCart(userId);
-				// console.log("Carritos", carritos);
+				
 				socket.emit(
 					"resp-message",
 					`Carrito encontrado :   ${JSON.stringify(carrito)}`
@@ -119,7 +107,7 @@ function socketFunction(io) {
 				return;
 			} else if (message.includes("orden")) {
 				await getOrder();
-				// console.log("order", ordenes);
+				
 				socket.emit(
 					"resp-message",
 					`Última orden encontrada :   ${JSON.stringify(orden)}`
@@ -127,14 +115,14 @@ function socketFunction(io) {
 				return;
 			} else if (message.includes("stock")) {
 				await getStock();
-				// console.log("productos", productos);
+				
 				socket.emit(
 					"resp-message",
 					`Vea el estoque de productos :   ${JSON.stringify(productos)}`
 				);
 				return;
 			}
-			// io.emit  manda pra todos users:
+			
 			socket.emit("resp-message", msgStandard);
 		});
 	});
