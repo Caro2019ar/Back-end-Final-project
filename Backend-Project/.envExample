@@ -1,0 +1,6 @@
+NODE_ENV=development
+MONGO_DB_URI="MONGO_DB_URI"
+TOKEN_KEEP_ALIVE="secret" 
+JWT_SECRET_KEY="secret" 
+NODEMAILER_EMAIL="secret@ethereal.email" 
+NODEMAILER_PASSWORD="secret"

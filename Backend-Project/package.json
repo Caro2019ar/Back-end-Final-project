@@ -5,8 +5,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "node --experimental-json-modules index.js",
-		"dev": "nodemon --experimental-json-modules index.js"
+		"start": "export NODE_ENV=development && node --experimental-json-modules src/index.js",
+		"dev": "export NODE_ENV=development && nodemon --experimental-json-modules src/index.js"
 	},
 	"engines": {
 		"node": ">=14.0.0",
