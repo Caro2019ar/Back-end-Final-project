@@ -6,7 +6,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "export NODE_ENV=development && node --experimental-json-modules src/index.js",
-		"dev": "export NODE_ENV=development MONGO_DB_URI='mongodb+srv://caro:12345699@cluster0.cwvci.mongodb.net/passport?retryWrites=true&w=majority' TOKEN_KEEP_ALIVE=sh JWT_SECRET_KEY=TOP_SECRET NODEMAILER_EMAIL=callie.muller@ethereal.email NODEMAILER_PASSWORD=h3M6CQm8Nj6Yvu6gGe && nodemon --experimental-json-modules src/index.js"
+		"dev": "export NODE_ENV=development && nodemon --experimental-json-modules src/index.js"
 	},
 	"engines": {
 		"node": ">=14.0.0",
