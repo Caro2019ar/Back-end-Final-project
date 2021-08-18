@@ -2,14 +2,20 @@ import Productos from "../api/productos.js";
 import UserModel from "../models/user.js";
 import { ProductoModel } from "../models/model.js";
 import { isAdminFunc } from "../middleware/auth.js";
-
 let productos = await new Productos();
 
 export const getProducts = async (req, res) => {
-	const productosListados = await productos.listarAll();
-	console.log(productosListados);
-	res.json(productosListados);
+	let { categoria } = req.query;
+	if (categoria) {
+		categoria = categoria.trim().toLowerCase();
+		const resultadoCategory = await productos.encontrarCategoria(categoria);
+		res.json(resultadoCategory);
+	} else {
+		const productosListados = await productos.listarAll();
+		res.json(productosListados);
+	}
 };
+
 export const getProductPorId = async (req, res) => {
 	const { id } = req.params;
 	try {
@@ -19,14 +25,6 @@ export const getProductPorId = async (req, res) => {
 		res.status(400).send({ message: "No se pudo encontrar el producto" });
 	}
 };
-
-export const getProductsCategory = async (req, res) => {
-	let { category } = req.params;
-	category = category.trim().toLowerCase();
-	const resultadoCategory = await productos.encontrarCategoria(category);
-	res.json(resultadoCategory);
-};
-
 export const postProducts = async (req, res) => {
 	const producto = req.body;
 	try {

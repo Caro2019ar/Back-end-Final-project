@@ -1,7 +1,6 @@
 import {
 	getProducts,
 	getProductPorId,
-	getProductsCategory,
 	postProducts,
 	patchProductId,
 	deleteProductId,
@@ -15,8 +14,7 @@ const passportOK = passport.authenticate("jwt", { session: false });
 const router = express.Router();
 
 router.get("/", getProducts);
-router.get("/porid/:id", getProductPorId);
-router.get("/:category", getProductsCategory);
+router.get("/:id", getProductPorId);
 router.post("/", passportOK, isAdminFunc, postProducts);
 router.patch("/:id", passportOK, isAdminFunc, patchProductId);
 router.delete("/:id", passportOK, isAdminFunc, deleteProductId);
