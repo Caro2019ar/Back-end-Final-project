@@ -138,7 +138,6 @@
 		"/api/products/": {
 			"get": {
 				"tags": ["Product"],
-				"security": [{ "bearerAuth": [] }],
 				"description": "Lista todos los productos",
 				"parameters": [],
 				"responses": {
@@ -170,7 +169,6 @@
 		"/api/products/porid/{id}": {
 			"get": {
 				"tags": ["Product"],
-				"security": [{ "bearerAuth": [] }],
 				"description": "Buscar producto por ID informado",
 				"parameters": [
 					{
@@ -190,7 +188,6 @@
 		"/api/products/{category}": {
 			"get": {
 				"tags": ["Product"],
-				"security": [{ "bearerAuth": [] }],
 				"description": "Busca productos por categoria",
 				"parameters": [
 					{
