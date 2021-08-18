@@ -12,6 +12,7 @@ const DbConnection = function () {
 				useNewUrlParser: true,
 				useCreateIndex: true,
 				useUnifiedTopology: true,
+				useFindAndModify: false,
 			});
 			console.log("MongoDB conectada");
 		} catch (err) {

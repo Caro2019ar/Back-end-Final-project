@@ -34,7 +34,6 @@ router.use(
 	})
 );
 
-
 router.use("/", routesAuth);
 router.use("/api/image", imageRoute);
 
@@ -50,15 +49,11 @@ router.use(
 	orderRoute
 );
 
-router.use(
-	"/api/products",
-	passport.authenticate("jwt", { session: false }),
-	productRoute
-);
+router.use("/api/products", productRoute);
 
-// Handle errors.
+// Handle all errors.
 router.use(function (err, req, res, next) {
 	res.status(err.status || 500);
-	res.json({ error: err });
+	res.json({ err });
 });
 export default router;

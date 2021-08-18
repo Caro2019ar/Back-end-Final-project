@@ -1,5 +1,6 @@
 import Productos from "../api/productos.js";
 import UserModel from "../models/user.js";
+import { ProductoModel } from "../models/model.js";
 import { isAdminFunc } from "../middleware/auth.js";
 
 let productos = await new Productos();
@@ -25,7 +26,6 @@ export const getProductsCategory = async (req, res) => {
 	const resultadoCategory = await productos.encontrarCategoria(category);
 	res.json(resultadoCategory);
 };
-// Aqui podia usar interface de Typescript para definir formato do produto
 
 export const postProducts = async (req, res) => {
 	const producto = req.body;
@@ -36,26 +36,25 @@ export const postProducts = async (req, res) => {
 		res.status(500).send({ message: "No se pudo guardar" });
 	}
 };
-
-// não atualiza só 1 campo?
 export const patchProductId = async (req, res) => {
 	const { id } = req.params;
-
-	const { nombre, descripcion, categoria, precio, stockDisponible, fotos } =
-		req.body;
-	const producto = {
-		nombre,
-		descripcion,
-		categoria,
-		precio,
-		stockDisponible,
-		fotos,
+	const prodObjt = {
+		nombre: req.body.nombre,
+		descripcion: req.body.descripcion,
+		precio: req.body.precio,
+		fotos: req.body.fotos,
+		categoria: req.body.categoria,
+		stockDisponible: req.body.stockDisponible,
 	};
 	try {
-		const prodActualizar = await productos.actualizar(producto, id);
-		res.json(prodActualizar);
+		const updateProduct = await productos.actualizar(prodObjt, id);
+		if (updateProduct) {
+			res.send({ message: "Product Updated", product: updateProduct });
+		} else {
+			res.status(500).send({ message: "Error in updaing product" });
+		}
 	} catch (err) {
-		res.status(400).json({ message: "No se pudo actualizar" });
+		res.status(404).send({ message: "Product Not Found" });
 	}
 };
 

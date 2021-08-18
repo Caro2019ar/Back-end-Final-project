@@ -9,14 +9,16 @@ import {
 
 import express from "express";
 import { isAdminFunc } from "../middleware/auth.js";
+import passport from "passport";
+const passportOK = passport.authenticate("jwt", { session: false });
 
 const router = express.Router();
 
 router.get("/", getProducts);
 router.get("/porid/:id", getProductPorId);
 router.get("/:category", getProductsCategory);
-router.post("/", isAdminFunc, postProducts);
-router.patch("/:id", isAdminFunc, patchProductId);
-router.delete("/:id", isAdminFunc, deleteProductId);
+router.post("/", passportOK, isAdminFunc, postProducts);
+router.patch("/:id", passportOK, isAdminFunc, patchProductId);
+router.delete("/:id", passportOK, isAdminFunc, deleteProductId);
 
 export default router;

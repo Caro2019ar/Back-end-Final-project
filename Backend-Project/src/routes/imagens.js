@@ -24,7 +24,7 @@ router.post(
 			if (user.isAdmin) {
 				console.log("req", req);
 				if (req.file === undefined) return res.send("you must select a file.");
-				const imgUrl = `http://localhost:8080/api/image/${req.file.id}`;
+				const imgUrl = `ID de la imagen ${req.file.id}`;
 				return res.send(imgUrl);
 			} else {
 				res.status(401).send({ message: "Token is not valid for admin user" });

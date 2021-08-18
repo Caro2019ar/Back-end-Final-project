@@ -74,10 +74,22 @@ const ordenSchema = mongoose.Schema(
 		timestamps: true,
 	}
 );
+
+const productoActualizarSchema = mongoose.Schema({
+	nombre: { type: String },
+	descripcion: { type: String },
+	categoria: { type: String },
+	precio: { type: Number },
+	stockDisponible: { type: Number },
+	fotos: {
+		type: Array,
+	},
+});
 export const CarritoModel = mongoose.model("Cart", carritoSchema);
 
 export const OrdenModel = mongoose.model("Order", ordenSchema);
 
+export const MensajeModel = mongoose.model("Message", mensajeSchema);
+
 export const ProductoModel = mongoose.model("Product", productoSchema);
 
-export const MensajeModel = mongoose.model("Message", mensajeSchema);

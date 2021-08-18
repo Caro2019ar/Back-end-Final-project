@@ -30,18 +30,24 @@ class ProductosDaoDB {
 			throw new CustomError(400, "Error al guardar", err);
 		}
 	};
-
-	actualizar = async (producto, id) => {
+	actualizar = async (prodObjt, id) => {
 		try {
-			const result = await model.ProductoModel.updateOne(
-				{ _id: id },
-				{ $set: { ...producto } }
-			);
-			if (result.nModified >= 1) {
-				console.log("result.nModified", result.nModified);
-				return "Actualizado";
-			} else {
-				throw new CustomError(400, "No se pudo actualizar", err);
+			for (const [key, value] of Object.entries(prodObjt)) {
+				if (!value) {
+					delete prodObjt[key];
+				}
+			}
+			const product = await model.ProductoModel.find({ _id: id });
+			if (product) {
+				const updatedProduct = await model.ProductoModel.findOneAndUpdate(
+					{ _id: id },
+					{ $set: { ...prodObjt } },
+					{ new: true }
+				);
+				return updatedProduct;
+			}
+			else {
+				throw new CustomError(400, "No se pudo encontrar el producto", err);
 			}
 		} catch (err) {
 			throw new CustomError(400, "No se pudo actualizar", err);

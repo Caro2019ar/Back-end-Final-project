@@ -60,4 +60,3 @@ const validateName = (name) => {
 };
 
 export { validationSignup };
-
